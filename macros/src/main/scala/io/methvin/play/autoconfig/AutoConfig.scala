@@ -18,7 +18,13 @@ package io.methvin.play.autoconfig
 
 import play.api.ConfigLoader
 
+import scala.annotation.StaticAnnotation
+
 object AutoConfig {
+
+  final class named(name: String) extends StaticAnnotation {
+    assert(name != null && name.nonEmpty)
+  }
 
   def loader[T]: ConfigLoader[T] = macro AutoConfigImpl.loader[T]
 
