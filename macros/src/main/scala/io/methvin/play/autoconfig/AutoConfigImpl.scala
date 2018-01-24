@@ -48,7 +48,7 @@ private[autoconfig] class AutoConfigImpl(val c: blackbox.Context) {
       }
     }
     q"""
-      new ConfigLoader[$tpe] {
+      new _root_.play.api.ConfigLoader[$tpe] {
         override def load(config: _root_.com.typesafe.config.Config, path: String) = {
           val $confTerm = config.getConfig(path)
           new $tpe(...$argumentLists)
