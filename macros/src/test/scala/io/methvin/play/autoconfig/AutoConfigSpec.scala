@@ -103,6 +103,53 @@ class AutoConfigSpec extends WordSpec with Matchers {
       val qux = config.get[Qux]("qux")
       (qux.a, qux.b, qux.c) should === { ("hello", "goodbye", 0) }
     }
+    "work with an annotated case class" in {
+      case class FooApiConfig(
+        @AutoConfig.named("api-key") apiKey: String,
+        @AutoConfig.named("api-password") apiPassword: String,
+        @AutoConfig.named("request-timeout") requestTimeout: Duration
+      )
+      implicit val loader: ConfigLoader[FooApiConfig] = AutoConfig.loader
+      def fromConfiguration(conf: Configuration) = conf.get[FooApiConfig]("api.foo")
+
+      val conf = Configuration(ConfigFactory.parseString(
+        """api.foo {
+          |  api-key = "abcdef"
+          |  api-password = "secret"
+          |  request-timeout = 1 minute
+          |}
+        """.stripMargin))
+
+      fromConfiguration(conf) should === { FooApiConfig("abcdef", "secret", 1.minute) }
+    }
+    "work with an annotated regular class" in {
+      final class BarApiConfig(
+        @AutoConfig.named("api-key") val apiKey: String,
+        @AutoConfig.named("api-password") val apiPassword: String,
+        @AutoConfig.named("request-timeout") val requestTimeout: Duration
+      ) {
+        override def equals(that: Any): Boolean = that match {
+          case c: BarApiConfig =>
+            (c.apiKey, c.apiPassword, c.requestTimeout) == ((this.apiKey, this.apiPassword, this.requestTimeout))
+          case _ =>
+            false
+        }
+      }
+      object BarApiConfig {
+        implicit val loader: ConfigLoader[BarApiConfig] = AutoConfig.loader
+        def fromConfiguration(conf: Configuration) = conf.get[BarApiConfig]("api.foo")
+      }
+
+      val conf = Configuration(ConfigFactory.parseString(
+        """api.foo {
+          |  api-key = "abcdef"
+          |  api-password = "secret"
+          |  request-timeout = 1 minute
+          |}
+        """.stripMargin))
+
+      BarApiConfig.fromConfiguration(conf) should === { new BarApiConfig("abcdef", "secret", 1.minute) }
+    }
   }
 
 }
