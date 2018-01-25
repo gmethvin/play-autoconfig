@@ -14,7 +14,9 @@ libraryDependencies += "io.methvin.play" %% "autoconfig-macros" % playAutoConfig
 
 Replace `playAutoConfigVersion` with the latest version: [![maven central version](https://img.shields.io/maven-central/v/io.methvin.play/autoconfig-macros_2.12.svg)](https://mvnrepository.com/artifact/io.methvin.play/autoconfig-macros)
 
-## Example
+### Creating configuration classes
+
+It's good practice to create type-safe classes representing your configuration instead of passing around raw `Configuration` or `Config` objects. This way your application components can simply access properties of your class rather than having to read and convert configuration individually. This also makes it easier to create instances for unit testing.
 
 For example, suppose I want to read configuration for a hypothetical API I'm making calls to. Let's assume I need an API key, an API password, and I want to configure the request timeout. So I create a class like this:
 
@@ -75,3 +77,30 @@ api.foo {
   request-timeout = 1 minute
 }
 ```
+
+### Binding configuration classes
+
+Once you've written your config class, you'll need to make it available to the components that use it. If you're using compile-time DI, you can write something like this:
+
+```scala
+trait FooApiComponents {
+  def configuration: Configuration
+  lazy val fooApiConfig: FooApiConfig = configuration.get[FooApiConfig]("api.foo")
+  lazy val fooApi: FooApi = new FooApi(fooApiConfig)
+}
+```
+
+If using Guice you can add a `@Provides` method to your module with your config class:
+
+```scala
+class ConfigModule extends AbstractModule {
+  def configure: Unit = { /* ... */ }
+
+  @Provides def fooApiConfig(conf: Configuration): FooApiConfig =
+    conf.get[FooApiConfig]("api.foo")
+}
+```
+
+## License
+
+This library is licensed under the Apache License, version 2.0. See the LICENSE file for details.
