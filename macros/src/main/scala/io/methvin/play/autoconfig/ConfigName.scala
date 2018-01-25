@@ -16,15 +16,12 @@
 
 package io.methvin.play.autoconfig
 
-import play.api.ConfigLoader
+import scala.annotation.StaticAnnotation
 
-object AutoConfig {
-  /**
-    * Generate a `ConfigLoader[T]` calling the constructor of a class. Use [[ConfigConstructor]] and [[ConfigName]]
-    * annotations to change the constructor to use and the names of the parameters.
-    *
-    * @tparam T the type for which to create the configuration class
-    * @return an instance of the `ConfigLoader` for the given class.
-    */
-  def loader[T]: ConfigLoader[T] = macro AutoConfigImpl.loader[T]
+/**
+  * Rename a property of an object to a different configuration key
+  * @param name the name of the configuration key
+  */
+final class ConfigName(name: String) extends StaticAnnotation {
+  assert(name != null && name.nonEmpty)
 }

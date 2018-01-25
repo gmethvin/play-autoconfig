@@ -58,9 +58,9 @@ import io.methvin.play.autoconfig._
 import scala.concurrent.duration._
 
 case class FooApiConfig(
-  @AutoConfig.named("api-key") apiKey: String,
-  @AutoConfig.named("api-password") apiPassword: String,
-  @AutoConfig.named("request-timeout") requestTimeout: Duration
+  @ConfigName("api-key") apiKey: String,
+  @ConfigName("api-password") apiPassword: String,
+  @ConfigName("request-timeout") requestTimeout: Duration
 )
 object FooApiConfig {
   implicit val loader: ConfigLoader[FooApiConfig] = AutoConfig.loader
@@ -77,6 +77,28 @@ api.foo {
   request-timeout = 1 minute
 }
 ```
+
+### Using an alternate constructor
+
+You can also use an alternate constructor:
+
+```scala
+import play.api._
+import io.methvin.play.autoconfig._
+import scala.concurrent.duration._
+
+case class FooApiConfig(
+  apiKey: String,
+  apiPassword: String,
+  requestTimeout: Duration
+) {
+  @ConfigConstructor def this(key: String, password: String, timeout: Int) = {
+    this(key, password, duration.millis)
+  } 
+}
+```
+
+The field names will be taken from the argument names of the alternate constructor, or their associated `@ConfigName` annotation.
 
 ### Binding configuration classes
 
