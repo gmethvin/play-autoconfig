@@ -86,10 +86,10 @@ class AutoConfigSpec extends WordSpec with Matchers {
       val baz = config.get[Baz]("baz")
       (baz.a, baz.b, baz.c) should === { ("hello", "goodbye", 4.2) }
     }
-    "work with a case class with a non public default constructor and an alternate public constructor" in {
-      final class Qux private (val a: String, val b: String, val c: Double) {
+    "work with a class with an alternate constructor" in {
+      final class Qux(val a: String, val b: String, val c: Double) {
         // this constructor should be used since it's the only public constructor
-        def this(a: String, b: String) = this(a, b, 0)
+        @ConfigConstructor def this(a: String, b: String) = this(a, b, 0)
       }
       implicit val loader: ConfigLoader[Qux] = AutoConfig.loader
       val config = Configuration(ConfigFactory.parseString(
@@ -105,9 +105,9 @@ class AutoConfigSpec extends WordSpec with Matchers {
     }
     "work with an annotated case class" in {
       case class FooApiConfig(
-        @AutoConfig.named("api-key") apiKey: String,
-        @AutoConfig.named("api-password") apiPassword: String,
-        @AutoConfig.named("request-timeout") requestTimeout: Duration
+        @ConfigName("api-key") apiKey: String,
+        @ConfigName("api-password") apiPassword: String,
+        @ConfigName("request-timeout") requestTimeout: Duration
       )
       implicit val loader: ConfigLoader[FooApiConfig] = AutoConfig.loader
       def fromConfiguration(conf: Configuration) = conf.get[FooApiConfig]("api.foo")
@@ -124,9 +124,9 @@ class AutoConfigSpec extends WordSpec with Matchers {
     }
     "work with an annotated regular class" in {
       final class BarApiConfig(
-        @AutoConfig.named("api-key") val apiKey: String,
-        @AutoConfig.named("api-password") val apiPassword: String,
-        @AutoConfig.named("request-timeout") val requestTimeout: Duration
+        @ConfigName("api-key") val apiKey: String,
+        @ConfigName("api-password") val apiPassword: String,
+        @ConfigName("request-timeout") val requestTimeout: Duration
       ) {
         override def equals(that: Any): Boolean = that match {
           case c: BarApiConfig =>

@@ -23,29 +23,31 @@ private[autoconfig] class AutoConfigImpl(val c: blackbox.Context) {
 
   def loader[T](implicit t: WeakTypeTag[T]): Tree = {
     val tpe = t.tpe
-    // Look at all public constructors
-    val publicConstructors: Seq[MethodSymbol] = tpe.members.collect {
-      case m if m.isConstructor && m.isPublic && !m.fullName.endsWith("$init$") =>
+    // Look at all constructors
+    val constructors: Seq[MethodSymbol] = tpe.members.collect {
+      case m if m.isConstructor && !m.fullName.endsWith("$init$") =>
         m.asMethod
     }(collection.breakOut)
 
-    val constructor = publicConstructors match {
+    val configConstructors = constructors.filter(_.annotations.exists(_.tree.tpe =:= typeOf[ConfigConstructor]))
+    val constructor = configConstructors match {
       case Seq() =>
-        c.abort(c.enclosingPosition, s"Public constructor not found for type $tpe")
+        // Find the primary constructor
+        constructors.find(_.isPrimaryConstructor).getOrElse(
+          c.abort(c.enclosingPosition, s"No primary constructor found!")
+        )
       case Seq(cons) =>
         cons
-      case constructors =>
-        // If multiple public constructors are found, try to select the primary constructor, otherwise give up
-        constructors.find(_.isPrimaryConstructor).getOrElse(
-          c.abort(c.enclosingPosition, s"Multiple public constructors found for $tpe but one is not primary")
-        )
+      case _ =>
+        // multiple annotated constructors found
+        c.abort(c.enclosingPosition, s"Multiple constructors found annotated with @ConfigConstructor")
     }
 
     val confTerm = TermName(c.freshName("conf$"))
     val argumentLists = constructor.paramLists.map { params =>
       params.map { p =>
         val name = p.annotations.collectFirst {
-          case ann if ann.tree.tpe =:= typeOf[AutoConfig.named] =>
+          case ann if ann.tree.tpe =:= typeOf[ConfigName] =>
             ann.tree.children.last.toString
         }.getOrElse(p.name.decodedName.toString)
         q"implicitly[_root_.play.api.ConfigLoader[${p.typeSignature}]].load($confTerm, $name)"
