@@ -19,6 +19,7 @@ package io.methvin.play.autoconfig
 import play.api.ConfigLoader
 
 object AutoConfig {
+
   /**
     * Generate a `ConfigLoader[T]` calling the constructor of a class. Use [[ConfigConstructor]] and [[ConfigName]]
     * annotations to change the constructor to use and the names of the parameters.

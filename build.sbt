@@ -1,22 +1,13 @@
 organization in ThisBuild := "io.methvin.play"
 organizationName in ThisBuild := "Greg Methvin"
 startYear in ThisBuild := Some(2018)
-licenses in ThisBuild := Seq(
-  "Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html")
-)
-homepage in ThisBuild := Some(
-  url("https://github.com/gmethvin/play-autoconfig"))
+licenses in ThisBuild := Seq("Apache-2.0" -> url("https://www.apache.org/licenses/LICENSE-2.0.html"))
+homepage in ThisBuild := Some(url("https://github.com/gmethvin/play-autoconfig"))
 scmInfo in ThisBuild := Some(
-  ScmInfo(
-    url("https://github.com/gmethvin/play-autoconfig"),
-    "scm:git@github.com:gmethvin/play-autoconfig.git"
-  )
+  ScmInfo(url("https://github.com/gmethvin/play-autoconfig"), "scm:git@github.com:gmethvin/play-autoconfig.git")
 )
 developers in ThisBuild := List(
-  Developer("gmethvin",
-            "Greg Methvin",
-            "greg@methvin.net",
-            new URL("https://github.com/gmethvin"))
+  Developer("gmethvin", "Greg Methvin", "greg@methvin.net", new URL("https://github.com/gmethvin"))
 )
 
 val PlayVersion = "2.6.11"
@@ -68,4 +59,4 @@ releaseProcess := Seq[ReleaseStep](
   pushChanges
 )
 
-scalafmtOnCompile := true
+scalafmtOnCompile in ThisBuild := true

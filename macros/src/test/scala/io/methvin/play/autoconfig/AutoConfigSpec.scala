@@ -30,8 +30,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
 
       implicit val fooLoader: ConfigLoader[Foo] = AutoConfig.loader[Foo]
 
-      val config = Configuration(ConfigFactory.parseString(
-        """foo = {
+      val config = Configuration(ConfigFactory.parseString("""
+          |foo = {
           |  str = string
           |  int = 7
           |}
@@ -44,8 +44,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
 
       implicit val fooLoader: ConfigLoader[SnowmanConfig] = AutoConfig.loader[SnowmanConfig]
 
-      val config = Configuration(ConfigFactory.parseString(
-        """snowman = {
+      val config = Configuration(ConfigFactory.parseString("""
+          |snowman = {
           |  ☃ = snowman
           |  snowman-age = 5 hours
           |}
@@ -58,8 +58,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
         assert(c >= 0)
       }
       implicit val loader: ConfigLoader[Bar] = AutoConfig.loader
-      val config = Configuration(ConfigFactory.parseString(
-        """bar = {
+      val config = Configuration(ConfigFactory.parseString("""
+          |bar = {
           |  a = hello
           |  b = goodbye
           |  c = 4.2
@@ -75,8 +75,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
 
       }
       implicit val loader: ConfigLoader[Baz] = AutoConfig.loader
-      val config = Configuration(ConfigFactory.parseString(
-        """baz = {
+      val config = Configuration(ConfigFactory.parseString("""
+          |baz = {
           |  a = hello
           |  b = goodbye
           |  c = 4.2
@@ -92,8 +92,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
         @ConfigConstructor def this(a: String, b: String) = this(a, b, 0)
       }
       implicit val loader: ConfigLoader[Qux] = AutoConfig.loader
-      val config = Configuration(ConfigFactory.parseString(
-        """qux = {
+      val config = Configuration(ConfigFactory.parseString("""
+          |qux = {
           |  a = hello
           |  b = goodbye
           |  c = 4.2
@@ -112,8 +112,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
       implicit val loader: ConfigLoader[FooApiConfig] = AutoConfig.loader
       def fromConfiguration(conf: Configuration) = conf.get[FooApiConfig]("api.foo")
 
-      val conf = Configuration(ConfigFactory.parseString(
-        """api.foo {
+      val conf = Configuration(ConfigFactory.parseString("""
+          |api.foo {
           |  api-key = "abcdef"
           |  api-password = "secret"
           |  request-timeout = 1 minute
@@ -140,8 +140,8 @@ class AutoConfigSpec extends WordSpec with Matchers {
         def fromConfiguration(conf: Configuration) = conf.get[BarApiConfig]("api.foo")
       }
 
-      val conf = Configuration(ConfigFactory.parseString(
-        """api.foo {
+      val conf = Configuration(ConfigFactory.parseString("""
+          |api.foo {
           |  api-key = "abcdef"
           |  api-password = "secret"
           |  request-timeout = 1 minute

@@ -33,9 +33,9 @@ private[autoconfig] class AutoConfigImpl(val c: blackbox.Context) {
     val constructor = configConstructors match {
       case Seq() =>
         // Find the primary constructor
-        constructors.find(_.isPrimaryConstructor).getOrElse(
-          c.abort(c.enclosingPosition, s"No primary constructor found!")
-        )
+        constructors
+          .find(_.isPrimaryConstructor)
+          .getOrElse(c.abort(c.enclosingPosition, s"No primary constructor found!"))
       case Seq(cons) =>
         cons
       case _ =>
