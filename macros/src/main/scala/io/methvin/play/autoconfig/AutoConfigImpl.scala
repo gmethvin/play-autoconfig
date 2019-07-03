@@ -27,7 +27,7 @@ private[autoconfig] class AutoConfigImpl(val c: blackbox.Context) {
     val constructors: Seq[MethodSymbol] = tpe.members.collect {
       case m if m.isConstructor && !m.fullName.endsWith("$init$") =>
         m.asMethod
-    }(collection.breakOut)
+    }.toSeq
 
     val configConstructors = constructors.filter(_.annotations.exists(_.tree.tpe =:= typeOf[ConfigConstructor]))
     val constructor = configConstructors match {
