@@ -48,7 +48,7 @@ private[autoconfig] class AutoConfigImpl(val c: blackbox.Context) {
       params.map { p =>
         val name = p.annotations.collectFirst {
           case ann if ann.tree.tpe =:= typeOf[ConfigName] =>
-            ann.tree.children.last.toString
+            ann.tree.children.collectFirst { case Literal(Constant(str: String)) => str }.get
         }.getOrElse(p.name.decodedName.toString)
         q"implicitly[_root_.play.api.ConfigLoader[${p.typeSignature}]].load($confTerm, $name)"
       }

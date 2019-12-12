@@ -150,6 +150,20 @@ class AutoConfigSpec extends WordSpec with Matchers {
 
       BarApiConfig.fromConfiguration(conf) should === { new BarApiConfig("abcdef", "secret", 1.minute) }
     }
+    "work with a nested config" in {
+      case class FooNestedConfig(@ConfigName("nested.str") str: String, @ConfigName("nested.deep.int") int: Int)
+
+      implicit val fooLoader: ConfigLoader[FooNestedConfig] = AutoConfig.loader[FooNestedConfig]
+
+      val config = Configuration(ConfigFactory.parseString("""
+          |foo = {
+          |  nested.str = string
+          |  nested.deep.int = 7
+          |}
+        """.stripMargin))
+
+      config.get[FooNestedConfig]("foo") should === { FooNestedConfig("string", 7) }
+    }
   }
 
 }
