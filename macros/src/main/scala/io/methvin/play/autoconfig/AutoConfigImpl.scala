@@ -56,7 +56,7 @@ private[autoconfig] class AutoConfigImpl(val c: blackbox.Context) {
     q"""
       new _root_.play.api.ConfigLoader[$tpe] {
         override def load(config: _root_.com.typesafe.config.Config, path: String) = {
-          val $confTerm = config.getConfig(path)
+          val $confTerm = if (path.isEmpty) config else config.getConfig(path)
           new $tpe(...$argumentLists)
         }
       }

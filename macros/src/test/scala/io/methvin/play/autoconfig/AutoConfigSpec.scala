@@ -164,6 +164,18 @@ class AutoConfigSpec extends WordSpec with Matchers {
 
       config.get[FooNestedConfig]("foo") should === { FooNestedConfig("string", 7) }
     }
+    "work with the config root" in {
+      case class Foo(str: String, int: Int)
+
+      implicit val fooLoader: ConfigLoader[Foo] = AutoConfig.loader[Foo]
+
+      val config = Configuration(ConfigFactory.parseString("""
+          |str = string
+          |int = 7
+        """.stripMargin))
+
+      config.get[Foo]("") should === { Foo("string", 7) }
+    }
   }
 
 }
