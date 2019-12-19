@@ -10,9 +10,9 @@ developers in ThisBuild := List(
   Developer("gmethvin", "Greg Methvin", "greg@methvin.net", new URL("https://github.com/gmethvin"))
 )
 
-val PlayVersion = "2.7.3"
-scalaVersion in ThisBuild := "2.13.0"
-crossScalaVersions in ThisBuild := Seq("2.11.12", "2.12.8", scalaVersion.value)
+val PlayVersion = "2.8.0"
+scalaVersion in ThisBuild := "2.13.1"
+crossScalaVersions in ThisBuild := Seq("2.12.10", scalaVersion.value)
 
 lazy val `autoconfig-macros` = (project in file("macros"))
   .enablePlugins(AutomateHeaderPlugin)
