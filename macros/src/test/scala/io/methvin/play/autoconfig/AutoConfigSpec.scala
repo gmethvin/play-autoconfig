@@ -17,12 +17,13 @@
 package io.methvin.play.autoconfig
 
 import com.typesafe.config.ConfigFactory
-import org.scalatest.{Matchers, WordSpec}
+import org.scalatest.matchers.should.Matchers
+import org.scalatest.wordspec.AnyWordSpec
 import play.api.{ConfigLoader, Configuration}
 
 import scala.concurrent.duration._
 
-class AutoConfigSpec extends WordSpec with Matchers {
+class AutoConfigSpec extends AnyWordSpec with Matchers {
 
   "AutoConfig.loader" should {
     "work with a simple case class" in {

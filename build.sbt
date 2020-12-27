@@ -11,7 +11,7 @@ developers in ThisBuild := List(
 )
 
 val PlayVersion = "2.8.0"
-scalaVersion in ThisBuild := "2.13.1"
+scalaVersion in ThisBuild := "2.13.3"
 crossScalaVersions in ThisBuild := Seq("2.12.10", scalaVersion.value)
 
 lazy val `autoconfig-macros` = (project in file("macros"))
@@ -20,7 +20,7 @@ lazy val `autoconfig-macros` = (project in file("macros"))
     libraryDependencies ++= Seq(
       "com.typesafe.play" %% "play" % PlayVersion,
       "org.scala-lang" % "scala-reflect" % scalaVersion.value,
-      "org.scalatest" %% "scalatest" % "3.0.8" % Test
+      "org.scalatest" %% "scalatest" % "3.2.2" % Test
     )
   )
 
@@ -34,15 +34,13 @@ lazy val root = (project in file("."))
   )
   .aggregate(`autoconfig-macros`)
 
-publishMavenStyle in ThisBuild := true
-publishTo in ThisBuild := Some(
-  if (isSnapshot.value)
-    Opts.resolver.sonatypeSnapshots
-  else
-    Opts.resolver.sonatypeStaging
-)
+scalafmtOnCompile in ThisBuild := true
 
-import ReleaseTransformations._
+publishMavenStyle in ThisBuild := true
+publishTo in ThisBuild := sonatypePublishToBundle.value
+
+import sbtrelease.ReleasePlugin.autoImport.ReleaseTransformations._
+
 releaseCrossBuild := true
 releaseProcess := Seq[ReleaseStep](
   checkSnapshotDependencies,
@@ -53,10 +51,8 @@ releaseProcess := Seq[ReleaseStep](
   commitReleaseVersion,
   tagRelease,
   releaseStepCommandAndRemaining("+publishSigned"),
+  releaseStepCommand("sonatypeBundleRelease"),
   setNextVersion,
   commitNextVersion,
-  releaseStepCommand("sonatypeReleaseAll"),
   pushChanges
 )
-
-scalafmtOnCompile in ThisBuild := true

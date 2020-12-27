@@ -20,8 +20,7 @@ import play.api.ConfigLoader
 
 object AutoConfig {
 
-  /**
-    * Generate a `ConfigLoader[T]` calling the constructor of a class. Use [[ConfigConstructor]] and [[ConfigName]]
+  /** Generate a `ConfigLoader[T]` calling the constructor of a class. Use [[ConfigConstructor]] and [[ConfigName]]
     * annotations to change the constructor to use and the names of the parameters.
     *
     * @tparam T the type for which to create the configuration class
