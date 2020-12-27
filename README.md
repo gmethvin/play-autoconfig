@@ -1,6 +1,6 @@
 # Play AutoConfig
 
-[![Travis CI](https://travis-ci.org/gmethvin/play-autoconfig.svg?branch=master)](https://travis-ci.org/gmethvin/play-autoconfig) [![Maven](https://img.shields.io/maven-central/v/io.methvin.play/autoconfig-macros_2.12.svg)](https://mvnrepository.com/artifact/io.methvin.play/autoconfig-macros)
+[![Maven](https://img.shields.io/maven-central/v/io.methvin.play/autoconfig-macros_2.12.svg)](https://mvnrepository.com/artifact/io.methvin.play/autoconfig-macros)
 
 `AutoConfig` is a utility for type-safe configuration in Play (2.6.0 and later). The library provides a convenient macro to generate `ConfigLoader` instances for arbitrary classes.
 

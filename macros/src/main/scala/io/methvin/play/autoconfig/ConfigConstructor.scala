@@ -18,7 +18,6 @@ package io.methvin.play.autoconfig
 
 import scala.annotation.StaticAnnotation
 
-/**
-  * Used to mark a non-primary constructor as the constructor to use to instantiate the configuration class.
+/** Used to mark a non-primary constructor as the constructor to use to instantiate the configuration class.
   */
 final class ConfigConstructor extends StaticAnnotation

@@ -18,8 +18,7 @@ package io.methvin.play.autoconfig
 
 import scala.annotation.StaticAnnotation
 
-/**
-  * Rename a property of an object to a different configuration key
+/** Rename a property of an object to a different configuration key
   * @param name the name of the configuration key
   */
 final class ConfigName(name: String) extends StaticAnnotation {
